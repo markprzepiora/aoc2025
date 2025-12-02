@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# Cheat sheet:
+# https://kapeli.com/cheat_sheets/Bash_Test_Operators.docset/Contents/Resources/Documents/index
+
+readonly PROGDIR=$(cd "${0%/*}" && pwd)
+
+cd "${PROGDIR}/.."
+
+run() {
+    echo "RUNNING: $*"
+    "$@" 1> /tmp/test_output.txt 2> /tmp/test_error.txt
+    code=$?
+    out=$(</tmp/test_output.txt)
+    err=$(</tmp/test_error.txt)
+}
+
+expect_eq() {
+    local expected="$1"
+    local actual="$2"
+    local message="${3:-Expected '$expected' but got '$actual'}"
+    if [[ "$expected" != "$actual" ]]; then
+        echo "   FAIL: $message"
+    fi
+}
+
+expect_out_eq() {
+    expect_eq "$1" "$out" "$2"
+}
+
+expect_success() {
+    if [[ $code -ne 0 ]]; then
+        echo "   FAIL: Expected success but got exit code $code"
+        echo "    OUT: $out"
+        echo "    ERR: $err"
+    fi
+}
+
+run out/day01a input/day01example.txt
+expect_success
+expect_out_eq 3
+
+run out/day01a input/day01.txt
+expect_success
+expect_out_eq 1182
+
+run out/day01b input/day01example.txt
+expect_success
+expect_out_eq 6
+
+run out/day01b input/day01.txt
+expect_success
+expect_out_eq 6907
+
+run out/day02a input/day02example.txt
+expect_success
+expect_out_eq 1227775554
+
+run out/day02a input/day02.txt
+expect_success
+expect_out_eq 8576933996
+
+run out/day02b input/day02example.txt
+expect_success
+expect_out_eq 4174379265
+
+run out/day02b input/day02.txt
+expect_success
+expect_out_eq 25663320831

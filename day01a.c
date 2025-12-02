@@ -1,7 +1,10 @@
 #include <stdio.h>
 
-int main(void) {
-    FILE *file = fopen("input/day01.txt", "r");
+static char* DEFAULT_INPUT = "input/day01.txt";
+
+int main(int argc, char **argv)
+{
+    FILE *file = fopen(argc >= 2 ? argv[1] : DEFAULT_INPUT, "r");
     if (!file) {
         perror("Failed to open file");
         return 1;
