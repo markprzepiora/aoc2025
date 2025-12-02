@@ -5,65 +5,85 @@
 
 readonly PROGDIR=$(cd "${0%/*}" && pwd)
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 cd "${PROGDIR}/.."
 
+assertions_count=0
+failures_count=0
+
+add_assertion() {
+    assertions_count=$((assertions_count + 1))
+}
+
+add_failure() {
+    failures_count=$((failures_count + 1))
+}
+
 run() {
-    echo "RUNNING: $*"
+    running_cmd="$*"
     "$@" 1> /tmp/test_output.txt 2> /tmp/test_error.txt
     code=$?
     out=$(</tmp/test_output.txt)
     err=$(</tmp/test_error.txt)
 }
 
-expect_eq() {
+run_and_succeed_with_output() {
+    local expected_output="$1"
+    shift
+    run "$@"
+    assert_success
+    assert_out_eq "$expected_output"
+}
+
+assert_eq() {
+    add_assertion
     local expected="$1"
     local actual="$2"
     local message="${3:-Expected '$expected' but got '$actual'}"
     if [[ "$expected" != "$actual" ]]; then
-        echo "   FAIL: $message"
+        printf "\nRUNNING: %s\n" "${running_cmd}"
+        printf "   ${RED}FAIL:${NC} %s" "$message"
+        add_failure
+    else
+        printf "${GREEN}.${NC}"
     fi
 }
 
-expect_out_eq() {
-    expect_eq "$1" "$out" "$2"
+assert_out_eq() {
+    assert_eq "$1" "$out" "$2"
 }
 
-expect_success() {
+assert_success() {
+    add_assertion
     if [[ $code -ne 0 ]]; then
-        echo "   FAIL: Expected success but got exit code $code"
-        echo "    OUT: $out"
-        echo "    ERR: $err"
+        printf "\nRUNNING: %s\n" "${running_cmd}"
+        printf "   ${RED}FAIL:${NC} Expected success but got exit code %d\n" "$code"
+        printf "    OUT: %s\n" "$out"
+        printf "    ERR: %s\n" "$err"
+        add_failure
     fi
 }
 
-run out/day01a input/day01example.txt
-expect_success
-expect_out_eq 3
+report() {
+    if [[ $failures_count -eq 0 ]]; then
+        printf "\n\nFinished: ${GREEN}%d assertions, 0 failures${NC}\n" "$assertions_count"
+        exit 0
+    else
+        printf "\n\nFinished: ${RED}%d assertions, %d failure(s)${NC}\n" "$assertions_count" "$failures_count"
+        exit 1
+    fi
+}
 
-run out/day01a input/day01.txt
-expect_success
-expect_out_eq 1182
+run_and_succeed_with_output 3           out/day01a input/day01example.txt
+run_and_succeed_with_output 1182        out/day01a input/day01.txt
+run_and_succeed_with_output 6           out/day01b input/day01example.txt
+run_and_succeed_with_output 6907        out/day01b input/day01.txt
+run_and_succeed_with_output 1227775554  out/day02a input/day02example.txt
+run_and_succeed_with_output 8576933996  out/day02a input/day02.txt
+run_and_succeed_with_output 4174379265  out/day02b input/day02example.txt
+run_and_succeed_with_output 25663320831 out/day02b input/day02.txt
 
-run out/day01b input/day01example.txt
-expect_success
-expect_out_eq 6
-
-run out/day01b input/day01.txt
-expect_success
-expect_out_eq 6907
-
-run out/day02a input/day02example.txt
-expect_success
-expect_out_eq 1227775554
-
-run out/day02a input/day02.txt
-expect_success
-expect_out_eq 8576933996
-
-run out/day02b input/day02example.txt
-expect_success
-expect_out_eq 4174379265
-
-run out/day02b input/day02.txt
-expect_success
-expect_out_eq 25663320831
+report
