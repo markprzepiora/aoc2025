@@ -2,8 +2,9 @@ INCDIRS=-I./include
 CFLAGS=-Wall -Wextra -pedantic -std=c2x -ggdb
 CFLAGS+=$(INCDIRS)
 
-.PHONY: all clean test
-all: out/day01a out/day01b out/day02a out/day02b
+.PHONY: all bins test clean
+all: bins test
+bins: out/day01a out/day01b out/day02a out/day02b
 
 out/day01a: day01a.c
 	$(CC) $(CFLAGS) $^ -o $@
@@ -20,5 +21,5 @@ out/day02b: day02b.c
 clean:
 	rm -f *.o out/*
 
-test: all
+test: bins
 	bin/test
