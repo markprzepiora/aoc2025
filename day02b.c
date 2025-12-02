@@ -79,13 +79,11 @@ int main(int argc, char **argv)
         while (invalid_id <= MAX_ID) {
             for (size_t k = 0; k < ranges_count; k++) {
                 Range range = ranges[k];
-                if (range.start <= invalid_id && invalid_id <= range.end) {
-                    if (found_invalid(invalid_id, &invalid_ids)) {
-                        sum += invalid_id;
-                        #ifdef DEBUG
-                            printf("Invalid ID %10lu found in range %10lu - %10lu\n", invalid_id, range.start, range.end);
-                        #endif
-                    }
+                if (range.start <= invalid_id && invalid_id <= range.end && found_invalid(invalid_id, &invalid_ids)) {
+                    sum += invalid_id;
+                    #ifdef DEBUG
+                        printf("Invalid ID %10lu found in range %10lu - %10lu\n", invalid_id, range.start, range.end);
+                    #endif
                 }
             }
             invalid_id = (invalid_id * duplicator_factor) + i;
