@@ -77,15 +77,18 @@ report() {
     fi
 }
 
-run_and_succeed_with_output 3           out/day01a input/day01example.txt
-run_and_succeed_with_output 1182        out/day01a input/day01.txt
-run_and_succeed_with_output 6           out/day01b input/day01example.txt
-run_and_succeed_with_output 6907        out/day01b input/day01.txt
-run_and_succeed_with_output 1227775554  out/day02a input/day02example.txt
-run_and_succeed_with_output 8576933996  out/day02a input/day02.txt
-run_and_succeed_with_output 4174379265  out/day02b input/day02example.txt
-run_and_succeed_with_output 25663320831 out/day02b input/day02.txt
-run_and_succeed_with_output 357         out/day03a input/day03example.txt
-run_and_succeed_with_output 17087       out/day03a input/day03.txt
+run_and_succeed_with_output 3               out/day01a input/day01example.txt
+run_and_succeed_with_output 1182            out/day01a input/day01.txt
+run_and_succeed_with_output 6               out/day01b input/day01example.txt
+run_and_succeed_with_output 6907            out/day01b input/day01.txt
+run_and_succeed_with_output 1227775554      out/day02a input/day02example.txt
+run_and_succeed_with_output 8576933996      out/day02a input/day02.txt
+run_and_succeed_with_output 4174379265      out/day02b input/day02example.txt
+run_and_succeed_with_output 25663320831     out/day02b input/day02.txt
+run_and_succeed_with_output 357             out/day03a input/day03example.txt
+run_and_succeed_with_output 17087           out/day03a input/day03.txt
+run_and_succeed_with_output 3121910778619   out/day03b input/day03example.txt
+run_and_succeed_with_output 169019504359949 out/day03b input/day03.txt
+
 
 report
