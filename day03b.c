@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include "include/mrp.c"
 
 // #define DEBUG
 
@@ -45,14 +46,9 @@ long int max_joltage(char *buffer, size_t buffer_size)
 
 int main(int argc, char **argv)
 {
-    FILE *file = fopen(argc >= 2 ? argv[1] : DEFAULT_INPUT, "r");
-    if (!file) {
-        perror("Failed to open file");
-        return 1;
-    }
+    FILE *file = open_input_or_die(argc >= 2 ? argv[1] : DEFAULT_INPUT);
 
     long int sum_joltage = 0;
-
     while (fgets(BUFFER, BUFFER_SIZE, file)) {
         assert(BUFFER[strlen(BUFFER)-1] == '\n' && "Bank too large to fit in buffer");
         sscanf(BUFFER, "%s", BUFFER);
