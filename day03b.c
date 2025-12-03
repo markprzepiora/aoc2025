@@ -7,18 +7,22 @@
 // #define DEBUG
 
 #define BUFFER_SIZE 256
+#define JOLTAGE_LENGTH 12
+#define DEFAULT_INPUT "input/day03.txt"
+
+#define CTOI(c) ((c) - '0')
+
 static char BUFFER[BUFFER_SIZE];
-static char* DEFAULT_INPUT = "input/day03.txt";
 
 long int max_joltage(char *buffer, size_t buffer_size)
 {
-    int digits[12];
+    int digits[JOLTAGE_LENGTH];
 
-    for (size_t digits_index = 0; digits_index < 12; digits_index++) {
+    for (size_t digits_index = 0; digits_index < JOLTAGE_LENGTH; digits_index++) {
         size_t digit_index = digits_index > 0 ? digits[digits_index - 1] + 1 : 0;
-        for (size_t i = digit_index + 1; i < buffer_size - 12 + digits_index + 1; i++) {
-            int current_max = buffer[digit_index] - '0';
-            int candidate_max = buffer[i] - '0';
+        for (size_t i = digit_index + 1; i < buffer_size - JOLTAGE_LENGTH + digits_index + 1; i++) {
+            int current_max = CTOI(buffer[digit_index]);
+            int candidate_max = CTOI(buffer[i]);
             if (candidate_max > current_max) {
                 digit_index = i;
             }
@@ -27,14 +31,14 @@ long int max_joltage(char *buffer, size_t buffer_size)
     }
 
     #ifdef DEBUG
-        for (int i = 0; i < 12; i++) {
-            printf("digits[%2d] = %d ... -> %d\n", i, digits[i], buffer[digits[i]] - '0');
+        for (int i = 0; i < JOLTAGE_LENGTH; i++) {
+            printf("digits[%2d] = %d ... -> %d\n", i, digits[i], CTOI(buffer[digits[i]]));
         }
     #endif
 
     long int max_joltage = 0;
-    for (size_t i = 0; i < 12; i++) {
-        max_joltage = max_joltage * 10 + buffer[digits[i]] - '0';
+    for (size_t i = 0; i < JOLTAGE_LENGTH; i++) {
+        max_joltage = max_joltage * 10 + CTOI(buffer[digits[i]]);
     }
     return max_joltage;
 }
