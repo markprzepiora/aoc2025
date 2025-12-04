@@ -90,6 +90,7 @@ run_and_succeed_with_output 17087           out/day03a input/day03.txt
 run_and_succeed_with_output 3121910778619   out/day03b input/day03example.txt
 run_and_succeed_with_output 3121910778619   out/day03b input/day03example.no-trailing-lf.txt
 run_and_succeed_with_output 169019504359949 out/day03b input/day03.txt
-
+run_and_succeed_with_output 13              out/day04a input/day04example.txt
+run_and_succeed_with_output 1409            out/day04a input/day04.txt
 
 report
