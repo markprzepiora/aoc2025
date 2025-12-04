@@ -92,5 +92,7 @@ run_and_succeed_with_output 3121910778619   out/day03b input/day03example.no-tra
 run_and_succeed_with_output 169019504359949 out/day03b input/day03.txt
 run_and_succeed_with_output 13              out/day04a input/day04example.txt
 run_and_succeed_with_output 1409            out/day04a input/day04.txt
+run_and_succeed_with_output 43              out/day04b input/day04example.txt
+run_and_succeed_with_output 8366            out/day04b input/day04.txt
 
 report

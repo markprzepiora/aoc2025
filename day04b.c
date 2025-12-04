@@ -57,6 +57,8 @@ bool occupied(Grid *grid, int row, int col)
     }
 }
 
+// Check whether the cell at (row, col) is reachable, i.e. whether it has fewer
+// than four occupied neighbouring cells.
 bool reachable(Grid *grid, size_t row, size_t col)
 {
     int occupied_count = 0;
@@ -71,6 +73,8 @@ bool reachable(Grid *grid, size_t row, size_t col)
     return occupied_count < 4;
 }
 
+// Sweep the grid, removing reachable occupants and returning the count removed
+// from the grid.
 int sweep(Grid *grid)
 {
     int reachable_count = 0;
@@ -78,6 +82,7 @@ int sweep(Grid *grid)
         for (size_t col = 0; col < grid->width; col++) {
             if (occupied(grid, row, col) && reachable(grid, row, col)) {
                 reachable_count++;
+                grid->grid[row][col] = false; // Remove reachable occupant
                 log_debug("x");
             } else {
                 log_debug(".");
@@ -96,7 +101,14 @@ int main(int argc, char **argv)
         parse_line(&grid, BUFFER);
     }
 
-    printf("%d\n", sweep(&grid));
+    int total_removed = 0;
+    while (true) {
+        int removed = sweep(&grid);
+        if (removed == 0) break;
+        total_removed += removed;
+    }
+
+    printf("%d\n", total_removed);
 
     return 0;
 }
