@@ -47,7 +47,7 @@ long int max_joltage(char *buffer, size_t buffer_size)
 
 int main(int argc, char **argv)
 {
-    FILE *file = open_input_or_die(argc >= 2 ? argv[1] : DEFAULT_INPUT);
+    FILE *file = fopen_r_or_abort(argc >= 2 ? argv[1] : DEFAULT_INPUT);
 
     long int sum_joltage = 0;
     while (read_line(file, BUFFER, BUFFER_SIZE)) {

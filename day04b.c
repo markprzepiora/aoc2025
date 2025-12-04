@@ -95,7 +95,7 @@ int sweep(Grid *grid)
 
 int main(int argc, char **argv)
 {
-    FILE *file = open_input_or_die(argc >= 2 ? argv[1] : DEFAULT_INPUT);
+    FILE *file = fopen_r_or_abort(argc >= 2 ? argv[1] : DEFAULT_INPUT);
 
     while (read_line(file, BUFFER, BUFFER_SIZE)) {
         parse_line(&grid, BUFFER);

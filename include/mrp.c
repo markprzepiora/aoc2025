@@ -13,7 +13,7 @@
 
 #define debugger __asm__("int3");
 
-FILE *open_input_or_die(const char* filename)
+FILE *fopen_r_or_abort(const char* filename)
 {
     FILE *file = fopen(filename, "r");
     if (!file) {
