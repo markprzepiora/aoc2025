@@ -4,7 +4,7 @@ CFLAGS+=$(INCDIRS)
 
 .PHONY: all bins test clean
 all: bins
-bins: out/day01a out/day01b out/day02a out/day02b out/day03a out/day03b out/day04a out/day04b
+bins: out/day01a out/day01b out/day02a out/day02b out/day03a out/day03b out/day04a out/day04b out/day05a
 
 out/day01a: day01a.c
 	$(CC) $(CFLAGS) $^ -o $@
@@ -29,6 +29,9 @@ out/day04a: day04a.c include/mrp.c
 
 out/day04b: day04b.c include/mrp.c
 	$(CC) $(CFLAGS) day04b.c -o out/day04b
+
+out/day05a: day05a.c include/mrp.c
+	$(CC) $(CFLAGS) day05a.c -o out/day05a
 
 clean:
 	rm -f *.o out/*
