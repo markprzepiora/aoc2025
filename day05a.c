@@ -29,6 +29,7 @@ int main(int argc, char **argv)
         long int start;
         long int end;
         assert(sscanf(BUFFER, "%ld-%ld", &start, &end) == 2 && "failed to parse range");
+        assert(ranges_count < RANGES_CAP && "too many ranges to parse");
         ranges[ranges_count++] = (Range) { start, end };
         log_debug("parsed range: %ld - %ld\n", start, end);
     }
