@@ -23,6 +23,18 @@ FILE *fopen_r_or_abort(const char* filename)
     return file;
 }
 
+// returns the first non-whitespace character without consuming it
+char eat_whitespace(FILE *file) {
+    int c;
+    do {
+        c = fgetc(file);
+    } while (isspace(c) && c != '\n');
+    if (c != EOF) {
+        ungetc(c, file);
+    }
+    return c;
+}
+
 // Read a line, trimming the trailing newline
 char *read_line(FILE *file, char *buffer, size_t buffer_size)
 {

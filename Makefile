@@ -5,7 +5,7 @@ CFLAGS+=$(INCDIRS)
 .PHONY: all bins test clean
 all: bins
 bins: out/day01a out/day01b out/day02a out/day02b out/day03a out/day03b \
-	out/day04a out/day04b out/day05a out/day05b
+	out/day04a out/day04b out/day05a out/day05b out/day06a
 
 out/%: ./%.c include/mrp.c
 	$(CC) $(CFLAGS) $< -o $@
