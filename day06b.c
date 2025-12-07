@@ -123,18 +123,14 @@ void read_numbers(Table table)
                 continue;
             }
             Sequence *seq = &sequences[sequence_idx];
-            if (sequences_count < sequence_idx + 1) {
-                sequences_count = sequence_idx + 1;
-            }
+            sequences_count = MAX(sequence_idx + 1, sequences_count);
             char c = table_get(table, col, row);
             if (isdigit(c)) {
                 log_debug("(seq %zu, num %zu) Adding digit %c to end of %ld\n",
                           sequence_idx, number_idx, c, seq->numbers[number_idx]);
                 seq->numbers[number_idx] = seq->numbers[number_idx]*10 + CTOI(c);
             }
-            if (seq->count < number_idx + 1) {
-                seq->count = number_idx + 1;
-            }
+            seq->count = MAX(number_idx + 1, seq->count);
             number_idx++;
         }
         sequence_idx = 0;
