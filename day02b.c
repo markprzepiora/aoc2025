@@ -4,7 +4,11 @@
 #include <stdbool.h>
 
 #define STB_DS_IMPLEMENTATION
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#pragma GCC diagnostic ignored "-Wconversion"
 #include "include/stb_ds.h"
+#pragma GCC diagnostic pop
 
 // #define DEBUG
 #define MAX_RANGES_COUNT 100
@@ -61,7 +65,6 @@ int main(int argc, char **argv)
 
     long int sum = 0;
     long int duplicator_factor = 10;
-    int i_length = 1;
 
     InvalidID* invalid_ids = NULL;
 
@@ -72,7 +75,6 @@ int main(int argc, char **argv)
             case 1000:
             case 10000:
                 duplicator_factor *= 10;
-                i_length++;
         }
 
         long int invalid_id = (i * duplicator_factor) + i;

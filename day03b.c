@@ -21,7 +21,7 @@ long int max_joltage(char *buffer, size_t buffer_size)
     assert(buffer_size >= JOLTAGE_LENGTH && "bank length must be at least JOLTAGE_LENGTH");
 
     for (size_t digits_index = 0; digits_index < JOLTAGE_LENGTH; digits_index++) {
-        size_t digit_index = digits_index > 0 ? digits[digits_index - 1] + 1 : 0;
+        size_t digit_index = digits_index > 0 ? (size_t) (digits[digits_index - 1] + 1) : 0;
         for (size_t i = digit_index + 1; i < buffer_size - JOLTAGE_LENGTH + digits_index + 1; i++) {
             int current_max = CTOI(buffer[digit_index]);
             int candidate_max = CTOI(buffer[i]);
@@ -29,7 +29,7 @@ long int max_joltage(char *buffer, size_t buffer_size)
                 digit_index = i;
             }
         }
-        digits[digits_index] = digit_index;
+        digits[digits_index] = (int) digit_index;
     }
 
     #ifdef DEBUG

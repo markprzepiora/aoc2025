@@ -1,5 +1,5 @@
 INCDIRS=-I./include
-CFLAGS=-Wall -Wextra -pedantic -std=c2x -ggdb
+CFLAGS=-Wall -Wextra -Wconversion -Wsign-conversion -pedantic -std=c2x -ggdb -O2
 CFLAGS+=$(INCDIRS)
 
 .PHONY: all bins test clean

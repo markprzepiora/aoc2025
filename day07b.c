@@ -67,13 +67,13 @@ void complete_table(Table *table)
             char c = table->history[row][col];
             char below = table->history[row + 1][col];
             if (c == '|' && below == '|') {
-                table_set(table, row, col, table_get(table, row + 1, col));
+                table_set(table, (size_t) row, col, table_get(table, (size_t) row + 1, col));
             } else if (c == '|' && below == '^') {
-                long int left_value = col > 0 ? table_get(table, row + 1, col - 1) : 0;
-                long int right_value = col + 1 < table->cols ? table_get(table, row + 1, col + 1) : 0;
-                table_set(table, row, col, left_value + right_value);
+                long int left_value = col > 0 ? table_get(table, (size_t) row + 1, col - 1) : 0;
+                long int right_value = col + 1 < table->cols ? table_get(table, (size_t) row + 1, col + 1) : 0;
+                table_set(table, (size_t) row, col, left_value + right_value);
             } else {
-                table_set(table, row, col, 0);
+                table_set(table, (size_t) row, col, 0);
             }
         }
     }

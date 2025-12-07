@@ -96,7 +96,7 @@ Table read_table(FILE *file)
     // compute column count
     char *line_end = strchr(table.contents, '\n');
     assert(line_end && "First line does not contain a newline");
-    table.cols_len = line_end - table.contents;
+    table.cols_len = (size_t) (line_end - table.contents);
     table.rows_len = 1;
 
     char *line_end_prev = line_end + 1;

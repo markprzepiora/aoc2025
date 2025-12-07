@@ -12,8 +12,8 @@ static char BUFFER[BUFFER_SIZE];
 
 typedef struct Grid {
     bool grid[BUFFER_SIZE][BUFFER_SIZE];
-    size_t width;
-    size_t height;
+    int width;
+    int height;
 } Grid;
 
 static Grid grid = { 0 };
@@ -26,9 +26,9 @@ void parse_line(Grid *grid, char *line)
     int row = grid->height++;
     assert(row < BUFFER_SIZE && "attempted to parse more than BUFFER_SIZE lines");
     if (!grid->width) {
-        grid->width = line_len;
+        grid->width = (int) line_len;
     }
-    assert(grid->width == line_len && "encountered two different line lengths");
+    assert(grid->width == (int) line_len && "encountered two different line lengths");
 
     for (size_t n = 0; n < line_len; n++) {
         char symbol = line[n];
@@ -48,9 +48,9 @@ void parse_line(Grid *grid, char *line)
 
 bool occupied(Grid *grid, int row, int col)
 {
-    if (row < 0 || (size_t) row >= grid->height) {
+    if (row < 0 || row >= grid->height) {
         return false;
-    } else if (col < 0 || (size_t) col >= grid->width) {
+    } else if (col < 0 || col >= grid->width) {
         return false;
     } else {
         return grid->grid[row][col];
@@ -59,7 +59,7 @@ bool occupied(Grid *grid, int row, int col)
 
 // Check whether the cell at (row, col) is reachable, i.e. whether it has fewer
 // than four occupied neighbouring cells.
-bool reachable(Grid *grid, size_t row, size_t col)
+bool reachable(Grid *grid, int row, int col)
 {
     int occupied_count = 0;
     for (int test_row = (int) row - 1; test_row <= (int) row + 1; test_row++) {
@@ -78,8 +78,8 @@ bool reachable(Grid *grid, size_t row, size_t col)
 int sweep(Grid *grid)
 {
     int reachable_count = 0;
-    for (size_t row = 0; row < grid->height; row++) {
-        for (size_t col = 0; col < grid->width; col++) {
+    for (int row = 0; row < grid->height; row++) {
+        for (int col = 0; col < grid->width; col++) {
             if (occupied(grid, row, col) && reachable(grid, row, col)) {
                 reachable_count++;
                 grid->grid[row][col] = false; // Remove reachable occupant

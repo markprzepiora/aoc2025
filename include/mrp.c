@@ -48,7 +48,7 @@ char *read_file(FILE *file)
 }
 
 // returns the first non-whitespace character without consuming it
-char eat_whitespace(FILE *file) {
+int eat_whitespace(FILE *file) {
     int c;
     do {
         c = fgetc(file);
@@ -59,17 +59,11 @@ char eat_whitespace(FILE *file) {
     return c;
 }
 
-char peek(FILE *file) {
-    int c = fgetc(file);
-    ungetc(c, file);
-    return c;
-}
-
 // Read a line, trimming the trailing newline
 char *read_line(FILE *file, char *buffer, size_t buffer_size)
 {
     assert(buffer_size > 0 && "buffer size must be positive");
-    if (!fgets(buffer, buffer_size, file)) {
+    if (!fgets(buffer, (int) buffer_size, file)) {
         return NULL;
     }
     if (buffer[0] == '\0') {

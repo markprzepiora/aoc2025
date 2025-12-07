@@ -74,7 +74,7 @@ void read_numbers(FILE *file)
         assert(lines_count < MAX_NUMBERS && "number of lines exceeded MAX_NUMBERS");
         lines_count++;
         for (size_t i = 0; i < MAX_SEQUENCES; i++) {
-            char next_char = eat_whitespace(file);
+            int next_char = eat_whitespace(file);
             Sequence *sequence = &sequences[i];
 
             if (next_char == EOF) {
@@ -90,7 +90,7 @@ void read_numbers(FILE *file)
                 return;
             } else if (!isdigit(next_char)) {
                 // invalid character
-                fprintf(stderr, "ERROR: Invalid character '%c' while reading numbers\n", next_char);
+                fprintf(stderr, "ERROR: Invalid character '%d' while reading numbers\n", next_char);
                 exit(1);
             } else {
                 long int number;
@@ -110,11 +110,11 @@ void read_ops(FILE *file)
 {
     for (size_t i = 0; i < MAX_SEQUENCES; i++) {
         Sequence *sequence = &sequences[i];
-        char next_char = eat_whitespace(file);
+        int next_char = eat_whitespace(file);
         switch(next_char) {
             case '*':
             case '+': {
-                sequence->op = next_char;
+                sequence->op = (char) next_char;
                 fgetc(file);
             } break;
             case '\n':
