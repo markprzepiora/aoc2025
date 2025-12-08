@@ -1,5 +1,5 @@
 INCDIRS=-I./include
-CFLAGS=-Wall -Wextra -Wconversion -Wsign-conversion -pedantic -std=c2x -ggdb
+CFLAGS=-Wall -Wextra -Wconversion -Wsign-conversion -pedantic -std=c2x -lm -ggdb
 CFLAGS+=$(INCDIRS)
 
 .PHONY: all bins test clean
@@ -10,12 +10,6 @@ bins: out/day01a out/day01b out/day02a out/day02b out/day03a out/day03b \
 
 out/%: ./%.c include/mrp.c
 	$(CC) $(CFLAGS) $< -o $@
-
-out/day08a: ./day08a.c include/mrp.c
-	$(CC) $(CFLAGS) $< -lm -o $@
-
-out/day08b: ./day08b.c include/mrp.c
-	$(CC) $(CFLAGS) $< -lm -o $@
 
 clean:
 	rm -f *.o out/*
