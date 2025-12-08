@@ -6,12 +6,15 @@ CFLAGS+=$(INCDIRS)
 all: bins
 bins: out/day01a out/day01b out/day02a out/day02b out/day03a out/day03b \
 	out/day04a out/day04b out/day05a out/day05b out/day06a out/day06b \
-	out/day07a out/day07b out/day08a
+	out/day07a out/day07b out/day08a out/day08b
 
 out/%: ./%.c include/mrp.c
 	$(CC) $(CFLAGS) $< -o $@
 
 out/day08a: ./day08a.c include/mrp.c
+	$(CC) $(CFLAGS) $< -lm -o $@
+
+out/day08b: ./day08b.c include/mrp.c
 	$(CC) $(CFLAGS) $< -lm -o $@
 
 clean:
