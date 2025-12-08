@@ -6,13 +6,6 @@
 #include <stdbool.h>
 #include <sys/param.h>
 
-#define STB_DS_IMPLEMENTATION
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wconversion"
-#include "include/stb_ds.h"
-#pragma GCC diagnostic pop
-
 // #define DEBUG
 #include "include/mrp.c"
 
@@ -30,6 +23,11 @@ typedef struct {
     int box2_idx;
     float distance;
 } BoxPair;
+
+typedef struct {
+    BoxPair *pairs;
+    int count;
+} BoxPairs;
 
 typedef struct {
     int id;
@@ -103,19 +101,25 @@ void print_pair(BoxPair p)
     print_box(boxes[p.box2_idx]);
 }
 
-BoxPair *build_box_pairs()
+BoxPairs build_box_pairs()
 {
-    BoxPair *pairs = NULL;
+    BoxPairs pairs = {0};
+    pairs.count = (boxes_count * (boxes_count - 1)) / 2;
+    pairs.pairs = calloc((size_t) pairs.count, sizeof(BoxPair));
+
+    int pairs_idx = 0;
     for (int i = 0; i < boxes_count; i++) {
         for (int j = 0; j < i; j++) {
-            arrput(pairs, ((BoxPair){
+            assert(pairs_idx < pairs.count);
+            pairs.pairs[pairs_idx] = ((BoxPair){
                 .box1_idx = i,
                 .box2_idx = j,
                 .distance = distance(boxes[i], boxes[j]),
-            }));
+            });
+            pairs_idx++;
         }
     }
-    qsort(pairs, (size_t) arrlen(pairs), sizeof(BoxPair), (int (*)(const void *, const void *)) cmpboxpair);
+    qsort(pairs.pairs, (size_t) pairs.count, sizeof(BoxPair), (int (*)(const void *, const void *)) cmpboxpair);
     return pairs;
 }
 
@@ -156,11 +160,11 @@ int main(int argc, char **argv)
         #endif
     }
 
-    BoxPair *pairs = build_box_pairs();
+    BoxPairs pairs = build_box_pairs();
 
-    connections = MIN(connections, (int) arrlen(pairs));
+    connections = MIN(connections, pairs.count);
     for (int i = 0; i < connections; i++) {
-        BoxPair *pair = &pairs[i];
+        BoxPair *pair = &pairs.pairs[i];
         log_debug("Connecting boxes\n");
         #ifdef DEBUG
             print_pair(pairs[i]);
@@ -171,7 +175,6 @@ int main(int argc, char **argv)
     qsort(circuits, (size_t) boxes_count, sizeof(Circuit), (int (*)(const void *, const void *)) cmpcircuit);
 
     long int product = 1;
-
     assert(boxes_count >= 3);
     for (int i = 0; i < 3; i++) {
         product *= circuits[i].boxes_count;
