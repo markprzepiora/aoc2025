@@ -111,5 +111,7 @@ run_and_succeed_with_output 40              out/day08a input/day08example.txt 10
 run_and_succeed_with_output 57564           out/day08a input/day08.txt 1000
 run_and_succeed_with_output 25272           out/day08b input/day08example.txt
 run_and_succeed_with_output 133296744       out/day08b input/day08.txt
+run_and_succeed_with_output 50              out/day09a input/day09example.txt
+run_and_succeed_with_output 4774877510      out/day09a input/day09.txt
 
 report
