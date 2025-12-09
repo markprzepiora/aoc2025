@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <math.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
@@ -38,11 +37,11 @@ static Box boxes[MAX_BOXES];
 static int boxes_count = 0;
 static Circuit circuits[MAX_BOXES] = { 0 };
 
-float distance(Box a, Box b)
+float distance_squared(Box a, Box b)
 {
-    return sqrtf((a.x - b.x) * (a.x - b.x) +
-                 (a.y - b.y) * (a.y - b.y) +
-                 (a.z - b.z) * (a.z - b.z));
+    return (a.x - b.x) * (a.x - b.x) +
+           (a.y - b.y) * (a.y - b.y) +
+           (a.z - b.z) * (a.z - b.z);
 }
 
 void print_box(Box v)
@@ -114,7 +113,7 @@ BoxPairs build_box_pairs()
             pairs.pairs[pairs_idx] = ((BoxPair){
                 .box1_idx = i,
                 .box2_idx = j,
-                .distance = distance(boxes[i], boxes[j]),
+                .distance = distance_squared(boxes[i], boxes[j]),
             });
             pairs_idx++;
         }
