@@ -1,5 +1,5 @@
 INCDIRS=-I./include
-CFLAGS=-Wall -Wextra -Wconversion -Wsign-conversion -pedantic -std=c2x -lm -ggdb
+CFLAGS+=-Wall -Wextra -Wconversion -Wsign-conversion -pedantic -std=c2x -lm -ggdb
 CFLAGS+=$(INCDIRS)
 CC=clang
 
