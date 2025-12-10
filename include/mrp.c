@@ -7,8 +7,18 @@
 
 #ifdef DEBUG
 #define log_debug(...) fprintf(stderr, __VA_ARGS__)
+#define mrp_assert(expr, ...)                                                 \
+    do {                                                                      \
+        if (!(expr)) {                                                        \
+            fprintf(stderr, "%s:%d: ASSERTION FAILED: ", __FILE__, __LINE__); \
+            fprintf(stderr, __VA_ARGS__);                                     \
+            fprintf(stderr, "\n");                                            \
+            exit(1);                                                          \
+        }                                                                     \
+    } while (0)
 #else
 #define log_debug(...) do {} while (0)
+#define mrp_assert(...) do {} while (0)
 #endif
 
 #define debugger __asm__("int3");
@@ -25,6 +35,12 @@
         exit(1);                                                              \
     } while(0)
 #define UNUSED(x) (void)(x)
+#define mrp_die(...)                                   \
+    do {                                               \
+        printf("%s:%d: ERROR: ", __FILE__, __LINE__);  \
+        printf(__VA_ARGS__);                           \
+        exit(1);                                       \
+    } while(0)
 
 FILE *fopen_r_or_abort(const char* filename)
 {
