@@ -117,5 +117,18 @@ run_and_succeed_with_output 24              out/day09b input/day09example.txt
 run_and_succeed_with_output 1560475800      out/day09b input/day09.txt
 run_and_succeed_with_output 7               out/day10a input/day10example.txt
 run_and_succeed_with_output 550             out/day10a input/day10.txt
+run_and_succeed_with_output 33              out/day10b input/day10example.txt
+run_and_succeed_with_output 1100            out/day10b input/day10example2.txt
+run_and_succeed_with_output 138             out/day10b input/day10-001-138.txt
+run_and_succeed_with_output 155             out/day10b input/day10-030-155.txt
+run_and_succeed_with_output 70              out/day10b input/day10-036-70.txt
+run_and_succeed_with_output 91              out/day10b input/day10-054-91.txt
+run_and_succeed_with_output 107             out/day10b input/day10-123-107.txt
+run_and_succeed_with_output 234             out/day10b input/day10-126-234.txt
+run_and_succeed_with_output 49              out/day10b input/day10-127-49.txt
+run_and_succeed_with_output 46              out/day10b input/day10-131-46.txt
+run_and_succeed_with_output 67              out/day10b input/day10-137-67.txt
+run_and_succeed_with_output 75              out/day10b input/day10-138-75.txt
+run_and_succeed_with_output 68              out/day10b input/day10-173-68.txt
 
 report
