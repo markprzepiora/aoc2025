@@ -1,3 +1,6 @@
+#ifndef INCLUDE_MRP_C
+#define INCLUDE_MRP_C
+
 #include <assert.h>
 #include <ctype.h>
 #include <stdbool.h>
@@ -7,6 +10,10 @@
 
 #ifdef DEBUG
 #define log_debug(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define log_debug(...) do {} while (0)
+#endif
+
 #define mrp_assert(expr, ...)                                                 \
     do {                                                                      \
         if (!(expr)) {                                                        \
@@ -16,10 +23,6 @@
             exit(1);                                                          \
         }                                                                     \
     } while (0)
-#else
-#define log_debug(...) do {} while (0)
-#define mrp_assert(...) do {} while (0)
-#endif
 
 #define debugger __asm__("int3");
 #define debug_unless(cond) if (!(cond)) debugger
@@ -98,7 +101,7 @@ char *read_line(FILE *file, char *buffer, size_t buffer_size)
     }
 
     size_t len = strlen(buffer);
-    assert((feof(file) || buffer[len-1] == '\n') && "line too long to fit in buffer");
+    mrp_assert((feof(file) || buffer[len-1] == '\n'), "line too long to fit in buffer: %s", buffer);
 
     if (buffer[len-1] == '\n') {
         buffer[len-1] = '\0';
@@ -116,3 +119,5 @@ bool is_numeric(const char *str)
     }
     return true;
 }
+
+#endif // INCLUDE_MRP_C
