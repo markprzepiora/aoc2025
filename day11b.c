@@ -196,18 +196,28 @@ int *nodes_reachable_from_node(State state, int starting_node)
     return reachable;
 }
 
-int count_paths(State state, int starting_node)
+int indexof(int *arr, int arr_len, int val)
+{
+    for (int i = 0; i < arr_len; i++) {
+        if (arr[i] == val) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+long count_paths(State state, int starting_node, int ending_node)
 {
     int *sorted_nodes = toposort(state.adj_hash, (int) arrlen(state.node_id_to_name));
     int *reachability = nodes_reachable_from_node(state, starting_node);
-    int *paths_memo = calloc((size_t) state.nodes_len, sizeof(int));
-    memset(paths_memo, -1, (size_t) state.nodes_len * sizeof(int));
+    long *paths_memo = calloc((size_t) state.nodes_len, sizeof(long));
+    memset(paths_memo, -1, (size_t) state.nodes_len * sizeof(long));
 
     for (int sorted_nodes_idx = state.nodes_len - 1; sorted_nodes_idx >= 0; sorted_nodes_idx--) {
         int from_node = sorted_nodes[sorted_nodes_idx];
         if (!reachability[from_node]) {
             paths_memo[from_node] = 0;
-        } else if (from_node == state.out_node) {
+        } else if (from_node == ending_node) {
             paths_memo[from_node] = 1;
         } else {
             int paths = 0;
@@ -262,8 +272,31 @@ int main(int argc, char **argv)
         debug_log_adj(adj);
     }
 
-    int paths = count_paths(STATE, STATE.you_node);
-    printf("%d\n", paths);
+    int *sorted_nodes = toposort(STATE.adj_hash, (int) arrlen(STATE.node_id_to_name));
+    int svr_idx = indexof(sorted_nodes, (int) arrlen(sorted_nodes), get_node_id("svr"));
+    int dac_idx = indexof(sorted_nodes, (int) arrlen(sorted_nodes), get_node_id("dac"));
+    int fft_idx = indexof(sorted_nodes, (int) arrlen(sorted_nodes), get_node_id("fft"));
+    log_debug("svr_idx=%d, dac_idx=%d, fft_idx=%d\n", svr_idx, dac_idx, fft_idx);
+
+    int first_stop = sorted_nodes[MIN(dac_idx, fft_idx)];
+    int second_stop = sorted_nodes[MAX(dac_idx, fft_idx)];
+
+    long first_stop_paths = count_paths(STATE, sorted_nodes[svr_idx], first_stop);
+    log_debug("Paths from svr to first stop (%s): %ld\n",
+              STATE.node_id_to_name[first_stop], first_stop_paths);
+
+    long second_stop_paths = count_paths(STATE, first_stop, second_stop);
+    log_debug("Paths from first stop (%s) to second stop (%s): %ld\n",
+              STATE.node_id_to_name[first_stop],
+              STATE.node_id_to_name[second_stop],
+              second_stop_paths);
+
+    long final_paths = count_paths(STATE, second_stop, STATE.out_node);
+    log_debug("Paths from second stop (%s) to out: %ld\n",
+              STATE.node_id_to_name[second_stop], final_paths);
+
+    long total_paths = first_stop_paths * second_stop_paths * final_paths;
+    printf("%ld\n", total_paths);
 
     return 0;
 }

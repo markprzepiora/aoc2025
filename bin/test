@@ -132,5 +132,7 @@ run_and_succeed_with_output 75              out/day10b input/day10-138-75.txt
 run_and_succeed_with_output 68              out/day10b input/day10-173-68.txt
 run_and_succeed_with_output 5               out/day11a input/day11example.txt
 run_and_succeed_with_output 523             out/day11a input/day11.txt
+run_and_succeed_with_output 2               out/day11b input/day11b-example.txt
+run_and_succeed_with_output 517315308154944 out/day11b input/day11.txt
 
 report
