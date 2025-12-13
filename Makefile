@@ -15,7 +15,8 @@ bins: out/day01a out/day01b \
 	out/day08a out/day08b \
 	out/day09a out/day09b \
 	out/day10a out/day10b \
-	out/day11a out/day11b
+	out/day11a out/day11b \
+	out/day12
 
 out/%: ./%.c include/mrp.c
 	$(CC) $(CFLAGS) $< -o $@

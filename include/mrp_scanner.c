@@ -17,6 +17,11 @@ Scanner scanner_new(char *buffer)
     };
 }
 
+Scanner read_line_as_scanner(FILE *file, char *buffer, size_t buffer_size)
+{
+    return scanner_new(read_line(file, buffer, buffer_size));
+}
+
 int scanner_pos(Scanner *scanner)
 {
     return (int) (scanner->cursor - scanner->buffer);
@@ -56,6 +61,19 @@ void eat_char_or_die(Scanner *scanner, char c)
 {
     expect_char_or_die(scanner, c);
     eat_char(scanner, c);
+}
+
+int eat_positive_int_or_die(Scanner *scanner)
+{
+    int value = 0;
+    bool found_digit = false;
+    while (isdigit(*scanner->cursor)) {
+        found_digit = true;
+        value = value * 10 + (*scanner->cursor - '0');
+        scanner->cursor++;
+    }
+    expect_or_die(scanner, found_digit, "Expected positive integer");
+    return value;
 }
 
 size_t scan_until_ch(Scanner *scanner, char *buffer, size_t buffer_len, char sep)

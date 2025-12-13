@@ -14,16 +14,6 @@
 #define log_debug(...) do {} while (0)
 #endif
 
-#define mrp_assert(expr, ...)                                                 \
-    do {                                                                      \
-        if (!(expr)) {                                                        \
-            fprintf(stderr, "%s:%d: ASSERTION FAILED: ", __FILE__, __LINE__); \
-            fprintf(stderr, __VA_ARGS__);                                     \
-            fprintf(stderr, "\n");                                            \
-            exit(1);                                                          \
-        }                                                                     \
-    } while (0)
-
 #define debugger __asm__("int3");
 #define debug_unless(cond) if (!(cond)) debugger
 #define ARRAYLEN(arr)  (sizeof(arr) / sizeof((arr)[0]))
@@ -44,6 +34,16 @@
         printf(__VA_ARGS__);                           \
         exit(1);                                       \
     } while(0)
+#define mrp_assert(expr, ...)                                                 \
+    do {                                                                      \
+        if (!(expr)) {                                                        \
+            fprintf(stderr, "%s:%d: ASSERTION FAILED: ", __FILE__, __LINE__); \
+            fprintf(stderr, __VA_ARGS__);                                     \
+            fprintf(stderr, "\n");                                            \
+            debugger;                                                         \
+            exit(1);                                                          \
+        }                                                                     \
+    } while (0)
 
 FILE *fopen_r_or_abort(const char* filename)
 {
