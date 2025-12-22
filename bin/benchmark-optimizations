@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+readonly PROGDIR=$(cd "${0%/*}" && pwd)
+cd "${PROGDIR}/.."
+
+hyperfine -L cflags ",-O1,-O2,-O3,-O3 march=skylake,-O3 march=native" --setup "CFLAGS={cflags} make -B -j12" bin/test
