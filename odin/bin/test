@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+# Cheat sheet:
+# https://kapeli.com/cheat_sheets/Bash_Test_Operators.docset/Contents/Resources/Documents/index
+
+readonly PROGDIR=$(cd "${0%/*}" && pwd)
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+cd "${PROGDIR}/.."
+
+assertions_count=0
+failures_count=0
+
+add_assertion() {
+    assertions_count=$((assertions_count + 1))
+}
+
+add_failure() {
+    failures_count=$((failures_count + 1))
+}
+
+run() {
+    running_cmd="$*"
+    "$@" 1> /tmp/test_output.txt 2> /tmp/test_error.txt
+    code=$?
+    out=$(</tmp/test_output.txt)
+    err=$(</tmp/test_error.txt)
+}
+
+run_and_succeed_with_output() {
+    local expected_output="$1"
+    shift
+    run "$@"
+    assert_success
+    assert_out_eq "$expected_output"
+}
+
+assert_eq() {
+    add_assertion
+    local expected="$1"
+    local actual="$2"
+    local message="${3:-Expected '$expected' but got '$actual'}"
+    if [[ "$expected" != "$actual" ]]; then
+        printf "\nRUNNING: %s\n" "${running_cmd}"
+        printf "   ${RED}FAIL:${NC} %s" "$message"
+        add_failure
+    else
+        printf "${GREEN}.${NC}"
+    fi
+}
+
+assert_out_eq() {
+    assert_eq "$1" "$out" "$2"
+}
+
+assert_success() {
+    add_assertion
+    if [[ $code -ne 0 ]]; then
+        printf "\nRUNNING: %s\n" "${running_cmd}"
+        printf "   ${RED}FAIL:${NC} Expected success but got exit code %d\n" "$code"
+        printf "    OUT: %s\n" "$out"
+        printf "    ERR: %s\n" "$err"
+        add_failure
+    fi
+}
+
+report() {
+    if [[ $failures_count -eq 0 ]]; then
+        printf "\n\nFinished: ${GREEN}%d assertions, 0 failures${NC}\n" "$assertions_count"
+        exit 0
+    else
+        printf "\n\nFinished: ${RED}%d assertions, %d failure(s)${NC}\n" "$assertions_count" "$failures_count"
+        exit 1
+    fi
+}
+
+run_and_succeed_with_output 6               out/day01b input/day01example.txt
+run_and_succeed_with_output 6907            out/day01b input/day01.txt
+# run_and_succeed_with_output 1227775554      out/day02a input/day02example.txt
+# run_and_succeed_with_output 8576933996      out/day02a input/day02.txt
+# run_and_succeed_with_output 4174379265      out/day02b input/day02example.txt
+# run_and_succeed_with_output 25663320831     out/day02b input/day02.txt
+# run_and_succeed_with_output 357             out/day03a input/day03example.txt
+# run_and_succeed_with_output 17087           out/day03a input/day03.txt
+# run_and_succeed_with_output 3121910778619   out/day03b input/day03example.txt
+# run_and_succeed_with_output 3121910778619   out/day03b input/day03example.no-trailing-lf.txt
+# run_and_succeed_with_output 169019504359949 out/day03b input/day03.txt
+# run_and_succeed_with_output 13              out/day04a input/day04example.txt
+# run_and_succeed_with_output 1409            out/day04a input/day04.txt
+# run_and_succeed_with_output 43              out/day04b input/day04example.txt
+# run_and_succeed_with_output 8366            out/day04b input/day04.txt
+# run_and_succeed_with_output 3               out/day05a input/day05example.txt
+# run_and_succeed_with_output 617             out/day05a input/day05.txt
+# run_and_succeed_with_output 14              out/day05b input/day05example.txt
+# run_and_succeed_with_output 11              out/day05b input/day05example2.txt
+# run_and_succeed_with_output 338258295736104 out/day05b input/day05.txt
+# run_and_succeed_with_output 4277556         out/day06a input/day06example.txt
+# run_and_succeed_with_output 5782351442566   out/day06a input/day06.txt
+# run_and_succeed_with_output 3263827         out/day06b input/day06example.txt
+# run_and_succeed_with_output 10194584711842  out/day06b input/day06.txt
+# run_and_succeed_with_output 21              out/day07a input/day07example.txt
+# run_and_succeed_with_output 1573            out/day07a input/day07.txt
+# run_and_succeed_with_output 40              out/day07b input/day07example.txt
+# run_and_succeed_with_output 15093663987272  out/day07b input/day07.txt
+# run_and_succeed_with_output 40              out/day08a input/day08example.txt 10
+# run_and_succeed_with_output 57564           out/day08a input/day08.txt 1000
+# run_and_succeed_with_output 25272           out/day08b input/day08example.txt
+# run_and_succeed_with_output 133296744       out/day08b input/day08.txt
+# run_and_succeed_with_output 50              out/day09a input/day09example.txt
+# run_and_succeed_with_output 4774877510      out/day09a input/day09.txt
+# run_and_succeed_with_output 24              out/day09b input/day09example.txt
+# run_and_succeed_with_output 1560475800      out/day09b input/day09.txt
+# run_and_succeed_with_output 7               out/day10a input/day10example.txt
+# run_and_succeed_with_output 550             out/day10a input/day10.txt
+# run_and_succeed_with_output 33              out/day10b input/day10example.txt
+# run_and_succeed_with_output 1100            out/day10b input/day10example2.txt
+# run_and_succeed_with_output 138             out/day10b input/day10-001-138.txt
+# run_and_succeed_with_output 155             out/day10b input/day10-030-155.txt
+# run_and_succeed_with_output 70              out/day10b input/day10-036-70.txt
+# run_and_succeed_with_output 91              out/day10b input/day10-054-91.txt
+# run_and_succeed_with_output 107             out/day10b input/day10-123-107.txt
+# run_and_succeed_with_output 234             out/day10b input/day10-126-234.txt
+# run_and_succeed_with_output 49              out/day10b input/day10-127-49.txt
+# run_and_succeed_with_output 46              out/day10b input/day10-131-46.txt
+# run_and_succeed_with_output 67              out/day10b input/day10-137-67.txt
+# run_and_succeed_with_output 75              out/day10b input/day10-138-75.txt
+# run_and_succeed_with_output 68              out/day10b input/day10-173-68.txt
+# run_and_succeed_with_output 5               out/day11a input/day11example.txt
+# run_and_succeed_with_output 523             out/day11a input/day11.txt
+# run_and_succeed_with_output 2               out/day11b input/day11b-example.txt
+# run_and_succeed_with_output 517315308154944 out/day11b input/day11.txt
+# run_and_succeed_with_output 437             out/day12  input/day12.txt
+
+report
