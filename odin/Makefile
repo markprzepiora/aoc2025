@@ -3,7 +3,7 @@ all: bins
 bins: out/day01b
 
 out/%: ./%.odin
-	odin build $< -file -out:$@
+	odin build $< -debug -file -out:$@
 
 clean:
 	rm -f out/*
