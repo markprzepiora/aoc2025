@@ -73,16 +73,6 @@ func main() {
 	fmt.Printf("%d\n", password)
 }
 
-func newScannerFromArgs() *scanner {
-	args := os.Args
-	f, err := os.Open(args[1])
-	if err != nil {
-		fmt.Printf("Error opening file: %v\n", err)
-		os.Exit(1)
-	}
-	return newScanner(bufio.NewReader(f))
-}
-
 func printHelpAndExit() {
 	args := os.Args
 	if len(args) == 1 {
@@ -91,8 +81,14 @@ func printHelpAndExit() {
 	}
 }
 
-func newScanner(r *bufio.Reader) *scanner {
-	return &scanner{r: r}
+func newScannerFromArgs() *scanner {
+	args := os.Args
+	f, err := os.Open(args[1])
+	if err != nil {
+		fmt.Printf("Error opening file: %v\n", err)
+		os.Exit(1)
+	}
+	return &scanner{r: bufio.NewReader(f)}
 }
 
 func (s *scanner) read() rune {
@@ -107,17 +103,6 @@ func (s *scanner) unread() {
 	_ = s.r.UnreadRune()
 }
 
-func (s *scanner) scanNumber() Token {
-	var buf bytes.Buffer
-	ch := s.read()
-	for unicode.IsNumber(ch) {
-		buf.WriteRune(ch)
-		ch = s.read()
-	}
-	s.unread()
-	return Token{typ: TOK_NUMBER, val: buf.String()}
-}
-
 func (s *scanner) Scan() Token {
 	ch := s.read()
 
@@ -127,18 +112,25 @@ func (s *scanner) Scan() Token {
 
 	if ch == eof {
 		return Token{typ: TOK_EOF, val: ""}
-	}
-
-	if ch == 'R' || ch == 'L' {
+	} else if ch == 'R' || ch == 'L' {
 		return Token{typ: TOK_DIRECTION, val: string(ch)}
-	}
-
-	if unicode.IsNumber(ch) {
+	} else if unicode.IsNumber(ch) {
 		s.unread()
 		return s.scanNumber()
+	} else {
+		return Token{typ: TOK_OTHER, val: string(ch)}
 	}
+}
 
-	return Token{typ: TOK_OTHER, val: string(ch)}
+func (s *scanner) scanNumber() Token {
+	var buf bytes.Buffer
+	ch := s.read()
+	for unicode.IsNumber(ch) {
+		buf.WriteRune(ch)
+		ch = s.read()
+	}
+	s.unread()
+	return Token{typ: TOK_NUMBER, val: buf.String()}
 }
 
 func abs(x int) int {
