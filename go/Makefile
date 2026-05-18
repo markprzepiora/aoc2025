@@ -2,7 +2,8 @@
 all: bins
 bins: \
 	out/day01b \
-	out/day02b
+	out/day02b \
+	out/day03b
 
 out/%: ./%/main.go
 	go build -o $@ ./$<
