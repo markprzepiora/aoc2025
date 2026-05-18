@@ -46,6 +46,12 @@ func isNumeric(s []byte) bool {
 	return true
 }
 
+// The joltage of a numeric string is the maximum JOLTAGE_LENGTH-digit long
+// integer subsequence of the string.
+//
+// For example, for the string 818181911112111, given JOLTAGE_LENGTH = 12, the
+// joltage 888911112111 is produced by taking everything except some 1s near
+// the front.
 func joltage(buffer []byte) int64 {
 	// An array of indexes into `buffer`. Once we are done building it, the
 	// indexes will be strictly increasing.

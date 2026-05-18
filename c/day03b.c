@@ -17,12 +17,20 @@ static char BUFFER[BUFFER_SIZE];
 
 long int max_joltage(char *buffer, size_t buffer_size)
 {
+    // An array of indexes into `buffer`. Once we are done building it, the
+    // indexes will be strictly increasing.
     int digits[JOLTAGE_LENGTH];
     assert(buffer_size >= JOLTAGE_LENGTH && "bank length must be at least JOLTAGE_LENGTH");
 
     for (size_t digits_index = 0; digits_index < JOLTAGE_LENGTH; digits_index++) {
+        // start searching at 0 to start, then one index past each last max index
         size_t digit_index = digits_index > 0 ? (size_t) (digits[digits_index - 1] + 1) : 0;
-        for (size_t i = digit_index + 1; i < buffer_size - JOLTAGE_LENGTH + digits_index + 1; i++) {
+        // don't search too far into the buffer because we need to ensure we
+        // have enough room for the remaining digits
+        size_t digits_remaining = JOLTAGE_LENGTH - digits_index - 1;
+        // find the index of the largest digit within the search range and save
+        // it
+        for (size_t i = digit_index + 1; i < buffer_size - digits_remaining; i++) {
             int current_max = CTOI(buffer[digit_index]);
             int candidate_max = CTOI(buffer[i]);
             if (candidate_max > current_max) {
@@ -38,6 +46,8 @@ long int max_joltage(char *buffer, size_t buffer_size)
         }
     #endif
 
+    // compute the integer made up of the subsequence of `buffer` defined by
+    // `bufferIndexes`
     long int max_joltage = 0;
     for (size_t i = 0; i < JOLTAGE_LENGTH; i++) {
         max_joltage = max_joltage * 10 + CTOI(buffer[digits[i]]);
