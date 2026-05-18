@@ -3,11 +3,11 @@ name: Test
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  test:
+  c:
+    name: C
     runs-on: ubuntu-latest
 
     steps:
@@ -15,3 +15,35 @@ jobs:
 
     - name: Build and test
       run: cd c && make test
+
+  go:
+    name: Go
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version: stable
+
+    - name: Build and test
+      run: cd go && make test
+
+  odin:
+    name: Odin
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Odin
+      run: |
+        git clone https://github.com/odin-lang/Odin.git odinlang --depth 1 --single-branch --branch=master
+        cd odinlang
+        make
+        echo "$(pwd)" >> "$GITHUB_PATH"
+        cd ..
+
+    - name: Build and test
+      run: cd odin && make test
