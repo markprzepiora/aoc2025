@@ -79,11 +79,11 @@ main :: proc() {
 	for {
 		n := 0
 
-		line, err := bufio.reader_read_string(&r, '\n', context.allocator)
+		line, err := bufio.reader_read_string(&r, '\n')
 		if err != nil {
 			break
 		}
-		defer delete(line, context.allocator)
+		defer delete(line)
 		line = strings.trim_right(line, "\n")
 
 		when DEBUG {
