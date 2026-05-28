@@ -3,9 +3,10 @@ all: bins
 bins: \
 	out/day01b \
 	out/day02b \
-	out/day03b
+	out/day03b \
+	out/day04b
 
-out/%: ./%.odin
+out/%: %/main.odin
 	odin build $< -debug -file -out:$@
 
 clean:
@@ -14,5 +15,5 @@ clean:
 test: bins
 	bin/test
 
-dev: out/day03b
-	out/day03b input/day03example.txt
+dev: out/day04b
+	out/day04b input/day04example.txt
